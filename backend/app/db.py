@@ -1,0 +1,6 @@
+from sqlmodel import create_engine
+
+sqlite_url = "sqlite:///./app.db"
+engine = create_engine(sqlite_url, connect_args={"check_same_thread": False})
+
+
