@@ -1,14 +1,21 @@
 from typing import Optional
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlmodel import Session
+from pydantic import BaseModel
 
-from ..deps import get_session
+from ..deps import get_session, get_ws_manager
 from ..repositories.message_repository import MessageRepository
 from ..services.message_service import MessageService
 from ..schemas.message import MessageCreate, MessageRead
+from ..websocket_manager import ConnectionManager
+from ..ai.inferir import get_negativity_gradient
 
 router = APIRouter(prefix="/messages", tags=["messages"])
+
+
+class ScoreRequest(BaseModel):
+    message: str
 
 
 @router.get("/", response_model=list[MessageRead])
@@ -21,12 +28,51 @@ def list_messages(
 
 
 @router.post("/", response_model=MessageRead)
-def create_message(payload: MessageCreate, session: Session = Depends(get_session)):
+async def create_message(
+    payload: MessageCreate, 
+    session: Session = Depends(get_session),
+    ws_manager: ConnectionManager = Depends(get_ws_manager)
+):
     service = MessageService(MessageRepository(session))
-    return service.create_message(
+    created_message = service.create_message(
         message=payload.message,
-        message_score=payload.message_score,
         person_id=payload.person_id,
     )
+    
+    # Calculate updated average score
+    message_repo = MessageRepository(session)
+    all_messages = message_repo.list(person_id=payload.person_id)
+    average_score = None
+    if all_messages:
+        total_score = sum(msg.message_score for msg in all_messages)
+        average_score = total_score / len(all_messages)
+    
+    # Broadcast to all connected clients for this person
+    await ws_manager.broadcast_to_person(str(payload.person_id), {
+        "type": "new_message",
+        "message": {
+            "id": created_message.id,
+            "message": created_message.message,
+            "message_score": created_message.message_score,
+            "person_id": created_message.person_id
+        },
+        "average_score": average_score
+    })
+    return created_message
+
+
+@router.post("/preview-score")
+def preview_score(payload: ScoreRequest):
+    """Calculate sentiment score for a message without saving it."""
+    score = get_negativity_gradient(payload.message)
+    return {"score": score}
+
+
+@router.delete("/{message_id}", status_code=204)
+def delete_message(message_id: int, session: Session = Depends(get_session)):
+    service = MessageService(MessageRepository(session))
+    if not service.delete_message(message_id):
+        raise HTTPException(status_code=404, detail="Message not found")
+    return None
 
 

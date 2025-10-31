@@ -21,4 +21,12 @@ class MessageRepository:
         self.session.refresh(message)
         return message
 
+    def delete(self, message_id: int) -> bool:
+        message = self.session.get(Message, message_id)
+        if message:
+            self.session.delete(message)
+            self.session.commit()
+            return True
+        return False
+
 

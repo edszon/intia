@@ -2,8 +2,7 @@ from pydantic import BaseModel, Field
 
 
 class MessageCreate(BaseModel):
-    message: str
-    message_score: float = Field(ge=0.0, le=1.0)
+    message: str = Field(max_length=150, min_length=1)
     person_id: int
 
 

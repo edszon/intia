@@ -16,6 +16,29 @@ class PersonRepository:
         self.session.add(person)
         self.session.commit()
         self.session.refresh(person)
+        # Auto-set pfp_image to /pfps/{id}.png if not provided
+        if person.pfp_image is None:
+            person.pfp_image = f"/pfps/{person.id}.png"
+            self.session.add(person)
+            self.session.commit()
+            self.session.refresh(person)
         return person
+
+    def get_by_id(self, person_id: int) -> Person | None:
+        return self.session.get(Person, person_id)
+
+    def update(self, person: Person) -> Person:
+        self.session.add(person)
+        self.session.commit()
+        self.session.refresh(person)
+        return person
+
+    def delete(self, person_id: int) -> bool:
+        person = self.session.get(Person, person_id)
+        if person:
+            self.session.delete(person)
+            self.session.commit()
+            return True
+        return False
 
 
