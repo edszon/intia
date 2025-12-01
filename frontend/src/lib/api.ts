@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:8000/api';
+const API_URL = import.meta.env.PUBLIC_API_URL || "http://localhost:8000/api"
 
 export interface Person {
   id: number;
@@ -8,7 +8,7 @@ export interface Person {
 }
 
 export async function getPersons(): Promise<Person[]> {
-  const res = await fetch(`${API_URL}/persons`);
+  const res = await fetch(`${API_URL}/persons/`);
   if (!res.ok) throw new Error(`Failed to fetch persons: ${res.statusText}`);
   return res.json();
 }
