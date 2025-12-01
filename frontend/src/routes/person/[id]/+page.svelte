@@ -153,7 +153,7 @@ $: {
         fullAutocomplete = null;
         autocompleteSuffix = null;
       }
-    }, 1500);
+    }, 500);
 
     // While waiting for the next server suggestion, keep updating
     // how much of the current suggestion is still valid as you type.
@@ -457,7 +457,11 @@ $: {
           style="background-color: {textareaBackgroundColor};"
         >
           {#if autocompleteSuffix}
-            <div class="autocomplete-ghost">
+            <div
+              class="autocomplete-ghost"
+              in:fade={{ duration: 120 }}
+              out:fade={{ duration: 120 }}
+            >
               {commentText}<span class="ghost-suggestion">{autocompleteSuffix}</span>
             </div>
           {/if}
