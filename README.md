@@ -3,7 +3,6 @@
 **Disciplina:** Introdução à Inteligência Artificial  
 **Semestre:** 2025.2  
 **Professor:** Andre Luis Fonseca Faustino  
-
 **Turma:** T03
 
 ## Integrantes do Grupo
@@ -13,7 +12,7 @@
 ## Descrição do Projeto
 Fofoquinha é um sistema web em que cada pessoa tem uma página pública para receber mensagens anônimas.  
 As mensagens enviadas são analisadas automaticamente quanto ao sentimento (mais positivo ou mais negativo), gerando um indicador em tempo real e uma nuvem de palavras com os termos mais frequentes.  
-O backend é desenvolvido em **FastAPI** com banco de dados **SQLite**, utilizando **scikit-learn** (Naive Bayes) e um modelo simples de **cadeia de Markov** para autocomplete.  
+O backend é desenvolvido em **FastAPI**, com banco de dados **SQLite**, utilizando **scikit-learn** (Naive Bayes) e um modelo simples de **cadeia de Markov** para autocomplete.  
 O frontend é construído em **SvelteKit**, consumindo a API via HTTP e WebSockets para atualização em tempo real das mensagens e sentimentos, com suporte a execução local ou via **Docker**.
 
 ## Guia de Instalação e Execução
