@@ -236,7 +236,11 @@ $: {
   function setupWebSocket() {
     if (isNaN(personId)) return;
     
-    const wsUrl = `ws://localhost:8000/ws/${personId}`;
+    // Convert API URL to WebSocket URL
+    const apiUrl = import.meta.env.PUBLIC_API_URL || "http://localhost:8000/api";
+    const baseUrl = apiUrl.replace('/api', '').replace('http://', '').replace('https://', '');
+    const protocol = apiUrl.startsWith('https://') ? 'wss://' : 'ws://';
+    const wsUrl = `${protocol}${baseUrl}/ws/${personId}`;
     ws = new WebSocket(wsUrl);
 
     ws.onmessage = async (event) => {
