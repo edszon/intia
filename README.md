@@ -104,20 +104,20 @@ docker compose down
 
 Algumas capturas de tela da aplicação em execução:
 
-- Tela inicial (lista de pessoas):  
-  ![Tela inicial](prints/PRINT1.png)
+- Página da pessoa com mensagens recentes e nuvem de palavras:  
+  ![Perfil da pessoa](prints/PRINT1.png)
 
-- Página de pessoa com mensagens e nuvem de palavras:  
-  ![Página da pessoa](prints/PRINT2.png)
+- Caixa de envio mostrando mensagem classificada como negativa (debounce visual):  
+  ![Mensagem negativa](prints/PRINT2.png)
 
-- Envio de mensagem anônima:  
-  ![Envio de mensagem](prints/PRINT3.png)
+- Caixa de envio mostrando mensagem classificada como positiva (debounce visual):  
+  ![Mensagem positiva](prints/PRINT3.png)
 
-- Visualização dos scores de sentimento:  
-  ![Scores de sentimento](prints/PRINT4.png)
+- Autocomplete sugerindo continuação para sentimento negativo:  
+  ![Autocomplete negativo](prints/PRINT4.png)
 
-- Painel administrativo / visão geral:  
-  ![Painel administrativo](prints/PRINT5.png)
+- Autocomplete sugerindo continuação para sentimento positivo:  
+  ![Autocomplete positivo](prints/PRINT5.png)
 
 ## Referências
 
