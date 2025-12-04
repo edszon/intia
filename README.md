@@ -3,7 +3,7 @@
 **Disciplina:** Introdução à Inteligência Artificial  
 **Semestre:** 2025.2  
 **Professor:** Andre Luis Fonseca Faustino 
-**Turma:** [T03 / T04]
+**Turma:** TO3
 
 ## Integrantes do Grupo
 * Edson Luiz Cavalcanti Neto (20230041404)
