@@ -236,11 +236,19 @@ $: {
   function setupWebSocket() {
     if (isNaN(personId)) return;
     
-    // Convert API URL to WebSocket URL
-    const apiUrl = import.meta.env.PUBLIC_API_URL || "http://localhost:8000/api";
-    const baseUrl = apiUrl.replace('/api', '').replace('http://', '').replace('https://', '');
-    const protocol = apiUrl.startsWith('https://') ? 'wss://' : 'ws://';
-    const wsUrl = `${protocol}${baseUrl}/ws/${personId}`;
+    // Detecta a URL do WebSocket dinamicamente
+    const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+    const host = window.location.host;
+    
+    // Se estiver em dev local, conecta ao backend local
+    let wsUrl: string;
+    if (host.includes('localhost') || host.includes('127.0.0.1')) {
+      wsUrl = `ws://localhost:8000/ws/${personId}`;
+    } else {
+      // Em produção/ngrok, usa o mesmo host
+      wsUrl = `${protocol}${host}/ws/${personId}`;
+    }
+    
     ws = new WebSocket(wsUrl);
 
     ws.onmessage = async (event) => {

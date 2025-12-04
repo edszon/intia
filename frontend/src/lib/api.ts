@@ -1,4 +1,19 @@
-const API_URL = import.meta.env.PUBLIC_API_URL || "http://localhost:8000/api"
+// Detecta a URL base dinamicamente
+function getApiUrl(): string {
+  if (typeof window !== 'undefined') {
+    const protocol = window.location.protocol;
+    const host = window.location.host;
+    // Se estiver rodando em dev (localhost:5173 ou similar), usa backend local
+    if (host.includes('localhost') || host.includes('127.0.0.1')) {
+      return "http://localhost:8000/api";
+    }
+    // Caso contrário, assume que o backend está no mesmo host
+    return `${protocol}//${host}/api`;
+  }
+  return import.meta.env.PUBLIC_API_URL || "http://localhost:8000/api";
+}
+
+const API_URL = getApiUrl()
 
 export interface Person {
   id: number;
